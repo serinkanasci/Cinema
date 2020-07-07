@@ -1,0 +1,79 @@
+site de review de film
+
+BDD :
+
+	Users:
+		-id
+		-name
+		-lastname
+		-email
+		-address
+
+	Rating:
+		-id
+		-idUser
+		-idMovie
+		-value
+		-description
+
+	Movie:
+		-id
+		-name
+		-yearPublish
+		-realisator
+
+DROP TABLE IF EXISTS users, movie, rating CASCADE;
+CREATE TABLE IF NOT EXISTS Users (
+    id                	SERIAL PRIMARY KEY,
+    email               varchar(50) UNIQUE NOT NULL,
+    firstname           varchar(50) NOT NULL,
+    lastname            varchar(50) NOT NULL,
+    login            	varchar(50) NOT NULL,
+    password        	varchar(50) NOT NULL,
+    phone               varchar(10) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Movie (
+    id                	SERIAL PRIMARY KEY,
+    name            	varchar(50) NOT NULL,
+    yearPublish         integer NOT NULL CHECK (yearPublish > 1800 AND yearPublish < 2100),
+    realisator		varchar(50) NOT NULL,
+    synopsis		text NULL
+);
+
+CREATE TABLE IF NOT EXISTS Rating (
+    id                	SERIAL PRIMARY KEY,
+    note   				NUMERIC(1) NOT NULL CHECK (note >= 0 AND note < 6),
+    description      	text NULL,
+    fk_user_id    	    int REFERENCES Users(id),
+    fk_movie_id         int REFERENCES Movie(id)
+
+);
+
+
+INSERT INTO Users (id, email, firstname, lastname, login, password, phone)
+    VALUES 
+        (1, 'ofredrica@gmail.com','Fredrica','O Doherty','OFredrica','123456', '0657846325'),        
+        (2, 'mdonald@gmail.com','Donald','Medina','MDonald','_1245_', '0785416397'),        
+        (3, 'wcarly@gmail.com','Carly','Wright','WCarly','d255dsSZ', '0635148208'),
+        (4, 'omaurice@gmail.com','Maurice','O Neil','OMaurice','dqs-95dqs', '0657028725'),        
+        (5, 'hislay@gmail.com','Islay','Hayes','HIslay','dqds00_', '0754582365');  
+
+
+INSERT INTO Movie (id, name, yearPublish, realisator, synopsis)
+    VALUES 
+        (1,'Pulp Fiction',1994, 'Quentin Tarantino', 'L odyssée sanglante et burlesque de petits malfrats dans la jungle de Hollywood à travers trois histoires qui s entremêlent. Dans un restaurant, un couple de jeunes braqueurs, Pumpkin et Yolanda, discutent des risques que comporte leur activité. Deux truands, Jules Winnfield et son ami Vincent Vega, qui revient d Amsterdam, ont pour mission de récupérer une mallette au contenu mystérieux et de la rapporter à Marsellus Wallace.'),        
+        (2,'Manhattan',1979, 'Woody Allen', 'Isaac Davis est un auteur de sketches comiques new-yorkais de 42 ans que son épouse, Jil, vient de quitter. Celle-ci vit désormais avec une autre femme, Connie, et écrit un livre sur son ancienne vie conjugale. Isaac, quant à lui, entretient avec une collégienne de 17 ans, Tracy, une liaison dont il lui rappelle le caractère éphémère.'),        
+        (3,'Barry Lyndon',1975, 'Stanley Kubrick', 'Chassé de son Irlande natale après une série d exactions, Redmond Barry s engage dans l armée britannique et combat les Prussiens. La guerre finie, Redmond devient espion puis joueur professionnel. Il fréquente la haute société dont il apprend les usages et les bonnes manières. Ce talent lui permet de conquérir le coeur d une jeune veuve, la comtesse de Lyndon, dont le fils, lord Bullingdon, lui voue bientôt la plus vive animosité.'),
+        (4,'No Country for Old Men',2007, 'Ethan Coen, Joel Coen', 'A la frontière qui sépare le Texas du Mexique, les trafiquants de drogue ont depuis longtemps remplacé les voleurs de bétail. Lorsque Llewelyn Moss tombe sur une camionnette abandonnée, cernée de cadavres, il ne sait rien de ce qui a conduit à ce drame. Quand il prend les deux millions de dollars qu il découvre à l intérieur du véhicule, il n a pas la moindre idée de ce que cela va provoquer. Moss a déclenché une réaction en chaîne d une violence inouïe.'),        
+        (5,'The Guns of Navarone',1961, 'J. Lee Thompson', 'En 1943, depuis une petite île au large de la Turquie, les nazis ont braqué deux énormes canons sur une île voisine, où plusieurs milliers de Britanniques se retrouvent assiégés. Un commando d élite est chargé de détruire les canons coûte que coûte, avec le renfort de partisans grecs. Une mission presque impossible, d autant qu Andrea Stavros, le chef de ces derniers, a des raisons de haïr le capitaine Mallory, qui dirige le petit groupe des Britanniques.');  
+
+
+INSERT INTO Rating (id, note, description, fk_user_id, fk_movie_id)
+    VALUES 
+        (default,3, 'Beau film', 3, 2),        
+        (default,1, 'Film vrémen nul', 2, 1),        
+        (default,5, 'Vraiment adoré le film 5/5', 1, 1),
+        (default,4, 'Morbi congue, nisi eleifend.', 4, 4),        
+        (default,2, 'Film à peine regardable', 5, 4);  
+
